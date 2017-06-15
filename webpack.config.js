@@ -1,5 +1,6 @@
 const path = require('path');
 const dist = 'docs'
+const CompressionPlugin = require("compression-webpack-plugin")
 
 module.exports = {
     entry: './src/index.js',
@@ -29,7 +30,16 @@ module.exports = {
             }
         ]
     },
-    devtool: 'cheap-module-eval-source-map',
+    plugins: [
+		new CompressionPlugin({
+			asset: "[path].gz[query]",
+			algorithm: "gzip",
+			test: /\.(js|html)$/,
+			threshold: 10240,
+			minRatio: 0.8
+		})
+	],
+    //devtool: 'cheap-module-eval-source-map',
     devServer: {
         contentBase: path.join(__dirname, dist),
         compress: true,

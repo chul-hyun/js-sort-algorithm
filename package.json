@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "c3": "^0.4.13",
+    "compression-webpack-plugin": "^0.4.0",
     "css-loader": "^0.28.4",
     "file-loader": "^0.11.2",
     "nodemon": "^1.11.0",
