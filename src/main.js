@@ -2,30 +2,76 @@ require('c3/c3.css')
 const c3 = require('c3')
 const _ = require('lodash')
 
-//const lengths = [10, 100, 500, 1000, 10000, 50000, 100000, 300000, 500000, 1000000]
-const lengths = _.range(0, 1000, 100)
+//let lengths = [10, 100, 500, 1000, 10000, 50000, 100000, 300000, 500000, 1000000]
+let lengths = _.range(0, 1000, 100)
 const maxExecutTime = 1000 * 5
-const repeat = 30
+const repeat = 10
+let graph = {
+    x : lengths
+}
+let chart = initChart()
+const increase = document.querySelector('#increase')
+const excute5more = document.querySelector('#excute5more')
 
-var chart = c3.generate({
-    data: {
-        x: 'x',
-        columns: [ ]
-    },
-    axis: {
-        x: {
-            tick: {
-                rotate: 75
+increase.setAttribute('disabled', true)
+excute5more.setAttribute('disabled', true)
+
+increase.addEventListener('click', async () => {
+    increase.setAttribute('disabled', true)
+    excute5more.setAttribute('disabled', true)
+
+    chart = initChart()
+    lengths = [10, 100, 500, 1000, 10000, 50000, 100000, 300000, 500000, 1000000]
+    graph = {
+        x : lengths
+    }
+
+    for(let i = 0 ; i < 1 ; i++){
+        console.log(i)
+        await main()
+    }
+
+    increase.removeAttribute('disabled')
+    excute5more.removeAttribute('disabled')
+})
+
+excute5more.addEventListener('click', async () => {
+    increase.setAttribute('disabled', true)
+    excute5more.setAttribute('disabled', true)
+    
+    for(let i = 0 ; i < 5 ; i++){
+        console.log(i)
+        await main()
+    }
+
+    increase.removeAttribute('disabled')
+    excute5more.removeAttribute('disabled')
+})
+
+function initChart(){
+    return c3.generate({
+        data: {
+            x: 'x',
+            columns: [ ]
+        },
+        axis: {
+            x: {
+                tick: {
+                    rotate: 75
+                }
+            },
+            y: {
+                tick: {
+                    format: (y) => `${y} ms`
+                }
             }
         },
-        y: {
-            tick: {
-                format: (y) => `${y} ms`
-            }
-        }
-    },
-    "bindto": "#app"
-});
+        zoom: {
+            enabled: true
+        },
+        "bindto": "#app"
+    });
+}
 
 const MergeSortWorker = require('./mergeSort.worker.js')
 const QuickSortWorker = require('./quickSort.worker.js')
@@ -43,10 +89,10 @@ function main(){
         .then(()=> calculationSort('merge sort', MergeSortWorker))
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('bubble sort', BubbleSortWorker))
+        .then(()=> calculationSort('selection sort', SelectionSortWorker))
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('selection sort', SelectionSortWorker))
+        .then(()=> calculationSort('bubble sort', BubbleSortWorker))
         .then(viewGraph)
         .then(syncGraph)
 }
@@ -56,6 +102,9 @@ function main(){
         console.log(i)
         await main()
     }
+
+    increase.removeAttribute('disabled')
+    excute5more.removeAttribute('disabled')
 })()
 
 function calculationSort(name, AlgorithmWorker){
@@ -97,9 +146,6 @@ function _calculationSort(AlgorithmWorker, len){
     })
 }
 
-const graph = {
-    x : lengths
-}
 function viewGraph({ name, data }){
     if( graph[name] === undefined ){
         graph[name] = data
