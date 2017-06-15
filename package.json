@@ -1,0 +1,25 @@
+{
+  "name": "js-sort-algorithm",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack-dev-server",
+    "build": "webpack -w"
+  },
+  "devDependencies": {
+    "c3": "^0.4.13",
+    "css-loader": "^0.28.4",
+    "file-loader": "^0.11.2",
+    "nodemon": "^1.11.0",
+    "style-loader": "^0.18.2",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5",
+    "worker-loader": "^0.8.0"
+  },
+  "dependencies": {
+    "d3": "^4.9.1",
+    "express": "^4.15.3",
+    "lodash": "^4.17.4"
+  }
+}
