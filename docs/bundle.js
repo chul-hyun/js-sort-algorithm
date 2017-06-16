@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -80,10 +80,9 @@ __webpack_require__(7)
 const c3 = __webpack_require__(2)
 const _ = __webpack_require__(6)
 
-//let lengths = [10, 100, 500, 1000, 10000, 50000, 100000, 300000, 500000, 1000000]
-let lengths = _.range(0, 1000, 100)
+let lengths = _.range(0, 1001, 100)
 const maxExecutTime = 1000 * 5
-const repeat = 10
+const repeat = 5
 let graph = {
     x : lengths
 }
@@ -98,16 +97,19 @@ increase.addEventListener('click', async () => {
     increase.setAttribute('disabled', true)
     excute5more.setAttribute('disabled', true)
 
-    chart = initChart()
-    lengths = [10, 100, 500, 1000, 10000, 50000, 100000, 300000, 500000, 1000000]
-    graph = {
-        x : lengths
-    }
+    //chart = initChart()
+    lengths.push(10000, 50000, 100000, 300000, 500000)
+    console.log('lengths', lengths)
+    console.log('graph', graph)
+    //graph = {
+    //    x : lengths
+    //}
 
-    for(let i = 0 ; i < 1 ; i++){
+    for(let i = 0 ; i < 10 ; i++){
         console.log(i)
         await main()
     }
+    console.log('graph', graph)
 
     increase.removeAttribute('disabled')
     excute5more.removeAttribute('disabled')
@@ -144,6 +146,9 @@ function initChart(){
                 }
             }
         },
+        subchart: {
+            show: true
+        },
         zoom: {
             enabled: true
         },
@@ -151,11 +156,12 @@ function initChart(){
     });
 }
 
-const MergeSortWorker = __webpack_require__(13)
-const QuickSortWorker = __webpack_require__(14)
+const MergeSortWorker = __webpack_require__(14)
+const QuickSortWorker = __webpack_require__(15)
 const BubbleSortWorker = __webpack_require__(12)
-const SelectionSortWorker = __webpack_require__(15)
-const SortWorker = __webpack_require__(16)
+const InsertSortWorker = __webpack_require__(13)
+const SelectionSortWorker = __webpack_require__(16)
+const SortWorker = __webpack_require__(17)
 
 function main(){
     return calculationSort('sort', SortWorker)
@@ -165,6 +171,9 @@ function main(){
         .then(viewGraph)
         .then(syncGraph)
         .then(()=> calculationSort('merge sort', MergeSortWorker))
+        .then(viewGraph)
+        .then(syncGraph)
+        .then(()=> calculationSort('insert sort', InsertSortWorker))
         .then(viewGraph)
         .then(syncGraph)
         .then(()=> calculationSort('selection sort', SelectionSortWorker))
@@ -193,9 +202,17 @@ function calculationSort(name, AlgorithmWorker){
             return -1
         }
 
-        const executTime = await _calculationSort(AlgorithmWorker, len)
-        if(executTime < 0){
+        let startTime = window.performance.now()
+        /*const executTime = */
+        let passCheck = await _calculationSort(AlgorithmWorker, len)
+        let endTime = window.performance.now()
+        let executTime = endTime - startTime
+
+        console.log(executTime)
+
+        if(passCheck < 0){
             pass = true
+            return -1
         }
         return executTime
     })).then((executTimes) => {
@@ -225,16 +242,24 @@ function _calculationSort(AlgorithmWorker, len){
 }
 
 function viewGraph({ name, data }){
-    if( graph[name] === undefined ){
-        graph[name] = data
-    }else{
-        graph[name] = graph[name].map((origin, i) => (origin + data[i]) / 2)
-        
+    let originData = graph[name]
+
+    if( originData === undefined ){
+        graph[name] = data.map(convertSafeFloat)
+        return
     }
+
+    data.map(convertSafeFloat).forEach((val, i) => {
+        originData[i] = originData[i] === undefined ? val : parseFloat(((originData[i] + val) / 2).toFixed(5))
+    })
+}
+
+function convertSafeFloat(val){
+    return parseFloat(val.toFixed(5))
 }
 
 function divide(diviend, divisor){
-    return parseFloat(diviend / divisor).toFixed(3);
+    return parseFloat(diviend / divisor)
 }
 
 function syncGraph(){
@@ -35907,7 +35932,7 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "e0c8c115604469042f9d.worker.js");
+	return new Worker(__webpack_require__.p + "2833b9beca2e6bd6fca4.worker.js");
 };
 
 /***/ }),
@@ -35915,7 +35940,7 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "b5bc62d37359cd83c91e.worker.js");
+	return new Worker(__webpack_require__.p + "e0c8c115604469042f9d.worker.js");
 };
 
 /***/ }),
@@ -35923,7 +35948,7 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "036c89fb54a1f81b5385.worker.js");
+	return new Worker(__webpack_require__.p + "b5bc62d37359cd83c91e.worker.js");
 };
 
 /***/ }),
@@ -35931,11 +35956,19 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "82da14a6363c2d6a584e.worker.js");
+	return new Worker(__webpack_require__.p + "036c89fb54a1f81b5385.worker.js");
 };
 
 /***/ }),
 /* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = function() {
+	return new Worker(__webpack_require__.p + "82da14a6363c2d6a584e.worker.js");
+};
+
+/***/ }),
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(0)
