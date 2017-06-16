@@ -10,6 +10,6 @@ function insertSort(arr){
     }
 }
 
-require('./getAvgExecutTime')(insertSort, 10, 3, true)
+//require('./getAvgExecutTime')(insertSort, 10, 3, true)
 
 module.exports = insertSort
