@@ -2,10 +2,9 @@ require('c3/c3.css')
 const c3 = require('c3')
 const _ = require('lodash')
 
-//let lengths = [10, 100, 500, 1000, 10000, 50000, 100000, 300000, 500000, 1000000]
-let lengths = _.range(0, 1000, 100)
+let lengths = _.range(0, 1001, 100)
 const maxExecutTime = 1000 * 5
-const repeat = 10
+const repeat = 5
 let graph = {
     x : lengths
 }
@@ -20,16 +19,19 @@ increase.addEventListener('click', async () => {
     increase.setAttribute('disabled', true)
     excute5more.setAttribute('disabled', true)
 
-    chart = initChart()
-    lengths = [10, 100, 500, 1000, 10000, 50000, 100000, 300000, 500000, 1000000]
-    graph = {
-        x : lengths
-    }
+    //chart = initChart()
+    lengths.push(10000, 50000, 100000, 300000, 500000)
+    console.log('lengths', lengths)
+    console.log('graph', graph)
+    //graph = {
+    //    x : lengths
+    //}
 
-    for(let i = 0 ; i < 1 ; i++){
+    for(let i = 0 ; i < 10 ; i++){
         console.log(i)
         await main()
     }
+    console.log('graph', graph)
 
     increase.removeAttribute('disabled')
     excute5more.removeAttribute('disabled')
@@ -66,6 +68,9 @@ function initChart(){
                 }
             }
         },
+        subchart: {
+            show: true
+        },
         zoom: {
             enabled: true
         },
@@ -76,6 +81,7 @@ function initChart(){
 const MergeSortWorker = require('./mergeSort.worker.js')
 const QuickSortWorker = require('./quickSort.worker.js')
 const BubbleSortWorker = require('./bubbleSort.worker.js')
+const InsertSortWorker = require('./insertSort.worker.js')
 const SelectionSortWorker = require('./selectionSort.worker.js')
 const SortWorker = require('./sort.worker.js')
 
@@ -87,6 +93,9 @@ function main(){
         .then(viewGraph)
         .then(syncGraph)
         .then(()=> calculationSort('merge sort', MergeSortWorker))
+        .then(viewGraph)
+        .then(syncGraph)
+        .then(()=> calculationSort('insert sort', InsertSortWorker))
         .then(viewGraph)
         .then(syncGraph)
         .then(()=> calculationSort('selection sort', SelectionSortWorker))
@@ -115,9 +124,17 @@ function calculationSort(name, AlgorithmWorker){
             return -1
         }
 
-        const executTime = await _calculationSort(AlgorithmWorker, len)
-        if(executTime < 0){
+        let startTime = window.performance.now()
+        /*const executTime = */
+        let passCheck = await _calculationSort(AlgorithmWorker, len)
+        let endTime = window.performance.now()
+        let executTime = endTime - startTime
+
+        console.log(executTime)
+
+        if(passCheck < 0){
             pass = true
+            return -1
         }
         return executTime
     })).then((executTimes) => {
@@ -147,16 +164,24 @@ function _calculationSort(AlgorithmWorker, len){
 }
 
 function viewGraph({ name, data }){
-    if( graph[name] === undefined ){
-        graph[name] = data
-    }else{
-        graph[name] = graph[name].map((origin, i) => (origin + data[i]) / 2)
-        
+    let originData = graph[name]
+
+    if( originData === undefined ){
+        graph[name] = data.map(convertSafeFloat)
+        return
     }
+
+    data.map(convertSafeFloat).forEach((val, i) => {
+        originData[i] = originData[i] === undefined ? val : parseFloat(((originData[i] + val) / 2).toFixed(5))
+    })
+}
+
+function convertSafeFloat(val){
+    return parseFloat(val.toFixed(5))
 }
 
 function divide(diviend, divisor){
-    return parseFloat(diviend / divisor).toFixed(3);
+    return parseFloat(diviend / divisor)
 }
 
 function syncGraph(){

@@ -8,6 +8,8 @@
 
 * [selection sort source](https://github.com/vomvoru/js-sort-algorithm/blob/master/src/selectionSort.js)
 
+* [insert sort source](https://github.com/vomvoru/js-sort-algorithm/blob/master/src/insertSort.js)
+
 ---
 
 [성능 측정](https://vomvoru.github.io/js-sort-algorithm/)
