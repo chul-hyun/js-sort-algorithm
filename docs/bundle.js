@@ -35924,7 +35924,7 @@ module.exports = function(module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "ad831725b791b3c13715.worker.js");
+	return new Worker(__webpack_require__.p + "defbf70eed5ffca0aa9a.worker.js");
 };
 
 /***/ }),
@@ -35932,7 +35932,7 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "2833b9beca2e6bd6fca4.worker.js");
+	return new Worker(__webpack_require__.p + "6db1cfe7641d1b57fc19.worker.js");
 };
 
 /***/ }),

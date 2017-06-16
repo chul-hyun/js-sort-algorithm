@@ -41,17 +41,18 @@ function _mergeSort(arr, leftStart, leftEnd, rightStart, rightEnd){
             break;
         }
     }
-
+    
     result.forEach((val, i) => {
         arr[leftStart + i] = val
     })
-    //replace(arr, leftStart, result)
+    
+    //replace(arr, leftStart + 1, result)
 }
 
 function replace(target, start, newItems){
     let args = []
     args.push(start)
-    args.push(newItems.length)
+    args.push(newItems.length + 1)
     Array.prototype.push.apply(args, newItems)
     Array.prototype.splice.apply(target, args)
 }

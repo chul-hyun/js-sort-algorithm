@@ -7,18 +7,20 @@ function _quickSort(arr, left, right){
         return
     }
 
-    let pivot = getPivot(arr, left, right)
+    // let pivot = getPivot(arr, left, right)
+    let pivot = left
+    let pivotData = arr[pivot]
 
-    let i = left
+    let i = left + 1
     let j = right
 
     while(i !== j){
-        if(i === pivot || arr[i] <= arr[pivot]){
+        if(arr[i] <= pivotData){
             i++
             continue
         }
 
-        if(j === pivot || arr[j] >= arr[pivot]){
+        if(arr[j] >= pivotData){
             j--
             continue
         }
@@ -26,7 +28,7 @@ function _quickSort(arr, left, right){
         swap(arr, i, j)
     }
 
-    if(arr[pivot] < arr[i]){
+    if(pivotData < arr[i]){
         swap(arr, pivot, i - 1)
     }else{
         swap(arr, pivot, i)

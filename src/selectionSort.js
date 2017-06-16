@@ -11,7 +11,7 @@ function selectionSort(arr){
 function min(arr, start, end){
     let index = start
 
-    for(let i = start + 1 ; i <= end ; i++){
+    for(let i = end + 1 ; i > start ; i--){
         if(arr[i] < arr[index]){
             index = i
         }
