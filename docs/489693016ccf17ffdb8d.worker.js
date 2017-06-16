@@ -70,80 +70,13 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-function mergeSort(arr){
-    divide(arr, 0, arr.length - 1)
-}
-
-function divide(arr, leftStart, rightEnd){
-    if(leftStart < rightEnd){
-        let leftEnd = Math.floor((leftStart + rightEnd)/2)
-        let rightStart = leftEnd + 1
-
-        divide(arr, leftStart, leftEnd)
-        divide(arr, rightStart, rightEnd)
-        _mergeSort(arr, leftStart, leftEnd, rightStart, rightEnd)
-    }
-}
-
-function _mergeSort(arr, leftStart, leftEnd, rightStart, rightEnd){
-    let leftIndex = leftStart
-    let rightIndex = rightStart
-
-    let NumOfItemsToSort = rightEnd - leftStart + 1
-    let result = []
-
-    for(let i = 0 ; i < NumOfItemsToSort ; i++){
-        if(arr[leftIndex] < arr[rightIndex]){
-            result.push(arr[leftIndex])
-            leftIndex++
-        }else{
-            result.push(arr[rightIndex])
-            rightIndex++
-        }
-
-        if(leftIndex > leftEnd){
-            if(rightIndex <= rightEnd){
-                Array.prototype.push.apply(result, arr.slice(rightIndex, rightEnd + 1))
-            }
-            break;
-        }else if(rightIndex > rightEnd){
-            if(leftIndex <= leftEnd){
-                Array.prototype.push.apply(result, arr.slice(leftIndex, leftEnd + 1))
-            }
-            break;
-        }
-    }
-    
-    result.forEach((val, i) => {
-        arr[leftStart + i] = val
-    })
-    
-    //replace(arr, leftStart + 1, result)
-}
-
-function replace(target, start, newItems){
-    let args = []
-    args.push(start)
-    args.push(newItems.length + 1)
-    Array.prototype.push.apply(args, newItems)
-    Array.prototype.splice.apply(target, args)
-}
-
-
-module.exports = mergeSort
+eval("function sort(arr){\r\n    arr.sort((a, b) => a - b)\r\n}\r\n\r\nmodule.exports = sort//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMC5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy8uL3NyYy9zb3J0LmpzP2QwMTciXSwic291cmNlc0NvbnRlbnQiOlsiZnVuY3Rpb24gc29ydChhcnIpe1xyXG4gICAgYXJyLnNvcnQoKGEsIGIpID0+IGEgLSBiKVxyXG59XHJcblxyXG5tb2R1bGUuZXhwb3J0cyA9IHNvcnRcblxuXG4vLy8vLy8vLy8vLy8vLy8vLy9cbi8vIFdFQlBBQ0sgRk9PVEVSXG4vLyAuL3NyYy9zb3J0LmpzXG4vLyBtb2R1bGUgaWQgPSAwXG4vLyBtb2R1bGUgY2h1bmtzID0gMCJdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsInNvdXJjZVJvb3QiOiIifQ==");
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const mergeSort = __webpack_require__(0)
-
-onmessage = ({data}) =>{
-    mergeSort(data)
-    postMessage(true)
-
-    close()
-}
+eval("const sort = __webpack_require__(0)\r\n\r\nonmessage = ({data}) =>{\r\n    sort(data)\r\n    postMessage(true)\r\n\r\n    close()\r\n}//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMS5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy8uL3NyYy9zb3J0Lndvcmtlci5qcz84OTZkIl0sInNvdXJjZXNDb250ZW50IjpbImNvbnN0IHNvcnQgPSByZXF1aXJlKCcuL3NvcnQnKVxyXG5cclxub25tZXNzYWdlID0gKHtkYXRhfSkgPT57XHJcbiAgICBzb3J0KGRhdGEpXHJcbiAgICBwb3N0TWVzc2FnZSh0cnVlKVxyXG5cclxuICAgIGNsb3NlKClcclxufVxuXG5cbi8vLy8vLy8vLy8vLy8vLy8vL1xuLy8gV0VCUEFDSyBGT09URVJcbi8vIC4vc3JjL3NvcnQud29ya2VyLmpzXG4vLyBtb2R1bGUgaWQgPSAxXG4vLyBtb2R1bGUgY2h1bmtzID0gMCJdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsInNvdXJjZVJvb3QiOiIifQ==");
 
 /***/ })
 /******/ ]);

@@ -70,38 +70,13 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-function bubbleSort(arr){
-    for(let i = arr.length ; i >= 0 ; i--){
-        for(let j = 1 ; j < i ; j++){
-            if(arr[j - 1] > arr[j]){
-                swap(arr, j - 1, j)
-            }
-        }
-    }
-}
-
-function swap(arr, i, j){
-    const temp = arr[i]
-    arr[i] = arr[j]
-    arr[j] = temp
-}
-
-// require('./getAvgExecutTime')(bubbleSort, 10, 3, true)
-
-module.exports = bubbleSort
+eval("function insertSort(arr){\r\n    for(var i = 1 ; i < arr.length ; i++){\r\n        var val = arr[i]\r\n        var j = i - 1\r\n        while(j >= 0 && arr[j] > val){\r\n            arr[j + 1] = arr[j]\r\n            j--\r\n        }\r\n        arr[j + 1] = val\r\n    }\r\n}\r\n\r\n//require('./getAvgExecutTime')(insertSort, 10, 3, true)\r\n\r\nmodule.exports = insertSort//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMC5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy8uL3NyYy9pbnNlcnRTb3J0LmpzPzIxMzYiXSwic291cmNlc0NvbnRlbnQiOlsiZnVuY3Rpb24gaW5zZXJ0U29ydChhcnIpe1xyXG4gICAgZm9yKHZhciBpID0gMSA7IGkgPCBhcnIubGVuZ3RoIDsgaSsrKXtcclxuICAgICAgICB2YXIgdmFsID0gYXJyW2ldXHJcbiAgICAgICAgdmFyIGogPSBpIC0gMVxyXG4gICAgICAgIHdoaWxlKGogPj0gMCAmJiBhcnJbal0gPiB2YWwpe1xyXG4gICAgICAgICAgICBhcnJbaiArIDFdID0gYXJyW2pdXHJcbiAgICAgICAgICAgIGotLVxyXG4gICAgICAgIH1cclxuICAgICAgICBhcnJbaiArIDFdID0gdmFsXHJcbiAgICB9XHJcbn1cclxuXHJcbi8vcmVxdWlyZSgnLi9nZXRBdmdFeGVjdXRUaW1lJykoaW5zZXJ0U29ydCwgMTAsIDMsIHRydWUpXHJcblxyXG5tb2R1bGUuZXhwb3J0cyA9IGluc2VydFNvcnRcblxuXG4vLy8vLy8vLy8vLy8vLy8vLy9cbi8vIFdFQlBBQ0sgRk9PVEVSXG4vLyAuL3NyYy9pbnNlcnRTb3J0LmpzXG4vLyBtb2R1bGUgaWQgPSAwXG4vLyBtb2R1bGUgY2h1bmtzID0gMCJdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBIiwic291cmNlUm9vdCI6IiJ9");
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-const bubbleSort = __webpack_require__(0)
-
-onmessage = ({data}) =>{
-    bubbleSort(data)
-    postMessage(true)
-
-    close()
-}
+eval("const insertSort = __webpack_require__(0)\r\n\r\nonmessage = ({data}) =>{\r\n    insertSort(data)\r\n    postMessage(true)\r\n\r\n    close()\r\n}//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiMS5qcyIsInNvdXJjZXMiOlsid2VicGFjazovLy8uL3NyYy9pbnNlcnRTb3J0Lndvcmtlci5qcz80NGZlIl0sInNvdXJjZXNDb250ZW50IjpbImNvbnN0IGluc2VydFNvcnQgPSByZXF1aXJlKCcuL2luc2VydFNvcnQnKVxyXG5cclxub25tZXNzYWdlID0gKHtkYXRhfSkgPT57XHJcbiAgICBpbnNlcnRTb3J0KGRhdGEpXHJcbiAgICBwb3N0TWVzc2FnZSh0cnVlKVxyXG5cclxuICAgIGNsb3NlKClcclxufVxuXG5cbi8vLy8vLy8vLy8vLy8vLy8vL1xuLy8gV0VCUEFDSyBGT09URVJcbi8vIC4vc3JjL2luc2VydFNvcnQud29ya2VyLmpzXG4vLyBtb2R1bGUgaWQgPSAxXG4vLyBtb2R1bGUgY2h1bmtzID0gMCJdLCJtYXBwaW5ncyI6IkFBQUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSIsInNvdXJjZVJvb3QiOiIifQ==");
 
 /***/ })
 /******/ ]);

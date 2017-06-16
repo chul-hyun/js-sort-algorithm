@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack -w"
+    "build": "webpack"
   },
   "devDependencies": {
     "c3": "^0.4.13",

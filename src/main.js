@@ -32,10 +32,10 @@ function registEvent(){
     const runOneMoreDOM = document.querySelector('#runOneMore')
 
     runOneMoreDOM.addEventListener('click', async () => {
-    toogleUI(async() => {
-        await main()
+        toogleUI(async() => {
+            await main()
+        })
     })
-})
 }
 
 async function toogleUI(callback){
