@@ -79,54 +79,69 @@ module.exports = __webpack_require__.p + "index.html";
 __webpack_require__(7)
 const c3 = __webpack_require__(2)
 const _ = __webpack_require__(6)
+const utill = __webpack_require__(19)
 
-let lengths = _.range(0, 1001, 100)
-const maxExecutTime = 1000 * 5
-const repeat = 5
+const MergeSortWorker = __webpack_require__(14)
+const QuickSortWorker = __webpack_require__(15)
+const BubbleSortWorker = __webpack_require__(12)
+const InsertSortWorker = __webpack_require__(13)
+const SelectionSortWorker = __webpack_require__(16)
+const SortWorker = __webpack_require__(17)
+
+const runOneMore = document.querySelector('#runOneMore')
+
+let lengths = []
+const MAX_EXECUTE_TIME = 1000 * 5
 let graph = {
     x : lengths
 }
-let chart = initChart()
-const increase = document.querySelector('#increase')
-const excute5more = document.querySelector('#excute5more')
 
-increase.setAttribute('disabled', true)
-excute5more.setAttribute('disabled', true)
+let chart
 
-increase.addEventListener('click', async () => {
-    increase.setAttribute('disabled', true)
-    excute5more.setAttribute('disabled', true)
+init(100, 10000, 1)
+registEvent()
 
-    //chart = initChart()
-    lengths.push(10000, 50000, 100000, 300000, 500000)
-    console.log('lengths', lengths)
-    console.log('graph', graph)
-    //graph = {
-    //    x : lengths
-    //}
+function registEvent(){
+    [1000, 10000, 1000000, 100000000].forEach((num) => {
+        document.querySelector(`#range${num}`)
+            .addEventListener('click', () => init(10, num, 1))
+    })
 
-    for(let i = 0 ; i < 10 ; i++){
-        console.log(i)
+    const runOneMoreDOM = document.querySelector('#runOneMore')
+
+    runOneMoreDOM.addEventListener('click', async () => {
+    toogleUI(async() => {
         await main()
-    }
-    console.log('graph', graph)
-
-    increase.removeAttribute('disabled')
-    excute5more.removeAttribute('disabled')
+    })
 })
+}
 
-excute5more.addEventListener('click', async () => {
-    increase.setAttribute('disabled', true)
-    excute5more.setAttribute('disabled', true)
+async function toogleUI(callback){
+    const controllers = document.querySelectorAll('.controller')
+
+    controllers.forEach((ele) => ele.setAttribute('disabled', true))
     
-    for(let i = 0 ; i < 5 ; i++){
-        console.log(i)
-        await main()
-    }
+    await callback()
 
-    increase.removeAttribute('disabled')
-    excute5more.removeAttribute('disabled')
-})
+    controllers.forEach((ele) => ele.removeAttribute('disabled'))
+}
+
+
+async function init(start, end, repeat){
+    toogleUI(async() => {
+        _.range()
+        chart = initChart()
+        lengths = _.range(start, end + 1, Math.floor((end - start) / 10))
+        graph = {
+            x : lengths
+        }
+
+        for(let i = 0 ; i < repeat ; i++){
+            console.log(i)
+            await main()
+        }
+    })
+}
 
 function initChart(){
     return c3.generate({
@@ -156,63 +171,41 @@ function initChart(){
     });
 }
 
-const MergeSortWorker = __webpack_require__(14)
-const QuickSortWorker = __webpack_require__(15)
-const BubbleSortWorker = __webpack_require__(12)
-const InsertSortWorker = __webpack_require__(13)
-const SelectionSortWorker = __webpack_require__(16)
-const SortWorker = __webpack_require__(17)
-
 function main(){
-    return calculationSort('sort', SortWorker)
+    const numbersByLen = lengths.map((len) => utill.getRandomNumbers(len, 0, 100000000))
+    
+    return calculationSort('sort', SortWorker, numbersByLen)
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('quick sort', QuickSortWorker))
+        .then(()=> calculationSort('quick sort', QuickSortWorker, numbersByLen))
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('merge sort', MergeSortWorker))
+        .then(()=> calculationSort('merge sort', MergeSortWorker, numbersByLen))
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('insert sort', InsertSortWorker))
+        .then(()=> calculationSort('insert sort', InsertSortWorker, numbersByLen))
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('selection sort', SelectionSortWorker))
+        .then(()=> calculationSort('selection sort', SelectionSortWorker, numbersByLen))
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('bubble sort', BubbleSortWorker))
+        .then(()=> calculationSort('bubble sort', BubbleSortWorker, numbersByLen))
         .then(viewGraph)
         .then(syncGraph)
 }
 
-(async ()=>{
-    for(i = 0 ; i < repeat ; i++){
-        console.log(i)
-        await main()
-    }
-
-    increase.removeAttribute('disabled')
-    excute5more.removeAttribute('disabled')
-})()
-
-function calculationSort(name, AlgorithmWorker){
+function calculationSort(name, AlgorithmWorker, numbersByLen){
     let pass = false
 
-    return Promise.all(lengths.map(async (len) => {
+    return Promise.all(numbersByLen.map(async (numbers) => {
         if(pass){
             return -1
         }
 
-        let startTime = window.performance.now()
-        /*const executTime = */
-        let passCheck = await _calculationSort(AlgorithmWorker, len)
-        let endTime = window.performance.now()
-        let executTime = endTime - startTime
+        const executTime = await _calculationSort(AlgorithmWorker, numbers)
 
-        console.log(executTime)
-
-        if(passCheck < 0){
+        if(executTime < 0){
             pass = true
-            return -1
         }
         return executTime
     })).then((executTimes) => {
@@ -220,20 +213,22 @@ function calculationSort(name, AlgorithmWorker){
     })
 }
 
-
-
-function _calculationSort(AlgorithmWorker, len){
+function _calculationSort(AlgorithmWorker, numbers){
     return new Promise((resolve) => {
         const worker = new AlgorithmWorker()
 
         let timeout = setTimeout(()=>{
             worker.terminate()
             resolve(-1)
-        }, maxExecutTime)
+        }, MAX_EXECUTE_TIME)
 
-        worker.postMessage({ len })
-        worker.addEventListener('message', ({ data }) => {
-            const { executTime } = data
+        let startTime = window.performance.now()
+
+        worker.postMessage(numbers)
+        worker.addEventListener('message', () => {
+            let endTime = window.performance.now()
+            let executTime = endTime - startTime
+
             clearTimeout(timeout)
             worker.terminate()
             resolve(executTime)
@@ -250,16 +245,12 @@ function viewGraph({ name, data }){
     }
 
     data.map(convertSafeFloat).forEach((val, i) => {
-        originData[i] = originData[i] === undefined ? val : parseFloat(((originData[i] + val) / 2).toFixed(5))
+        originData[i] = originData[i] === undefined ? val : parseFloat(convertSafeFloat((originData[i] + val) / 2))
     })
 }
 
 function convertSafeFloat(val){
     return parseFloat(val.toFixed(5))
-}
-
-function divide(diviend, divisor){
-    return parseFloat(diviend / divisor)
 }
 
 function syncGraph(){
@@ -35924,7 +35915,7 @@ module.exports = function(module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "defbf70eed5ffca0aa9a.worker.js");
+	return new Worker(__webpack_require__.p + "55518fa240dfbf61a7f7.worker.js");
 };
 
 /***/ }),
@@ -35932,7 +35923,7 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "6db1cfe7641d1b57fc19.worker.js");
+	return new Worker(__webpack_require__.p + "e70b3fea5c80e9e458c8.worker.js");
 };
 
 /***/ }),
@@ -35940,7 +35931,7 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "e0c8c115604469042f9d.worker.js");
+	return new Worker(__webpack_require__.p + "1bc901e05c7a48ca60a8.worker.js");
 };
 
 /***/ }),
@@ -35948,7 +35939,7 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "b5bc62d37359cd83c91e.worker.js");
+	return new Worker(__webpack_require__.p + "e6d3d0258484998d7cd7.worker.js");
 };
 
 /***/ }),
@@ -35956,7 +35947,7 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "036c89fb54a1f81b5385.worker.js");
+	return new Worker(__webpack_require__.p + "5e84d3dadf2bafc7e00e.worker.js");
 };
 
 /***/ }),
@@ -35964,7 +35955,7 @@ module.exports = function() {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "82da14a6363c2d6a584e.worker.js");
+	return new Worker(__webpack_require__.p + "85ef1a34336ba9ca404a.worker.js");
 };
 
 /***/ }),
@@ -35973,6 +35964,44 @@ module.exports = function() {
 
 __webpack_require__(0)
 __webpack_require__(1)
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
+
+function getRandomNumber(min = 0, max = 20) {
+	return min + Math.floor(Math.random() * (max+1))
+}
+
+function getRandomNumberPromise(min = 0, max = 20) {
+    return new Promise((resolve) => {
+        resolve(getRandomNumber(min, max))
+    })
+}
+
+function getRandomNumbers(len = 20, min = 0, max = 20) {
+    let result = []
+    for(let i = 0 ; i < len ; i++){
+        result.push(getRandomNumber(min, max))
+    }
+    return result
+    //return Array(len).fill(0).map(() => getRandomNumber(min, max)) // 더 느림.
+}
+
+function arrayEaual(source, target){
+    return source.every((val, i) => val === target[i])
+}
+
+function copyArray(source){
+    return source.map((val) => val)
+}
+
+module.exports = {
+    getRandomNumber,
+    getRandomNumbers,
+    arrayEaual,
+    copyArray
+}
 
 /***/ })
 /******/ ]);
