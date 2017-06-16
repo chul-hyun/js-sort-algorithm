@@ -20,8 +20,11 @@ let graph = {
 
 let chart
 
-init(100, 10000, 1)
-registEvent()
+setTimeout(()=>{
+    init(100, 10000, 1)
+    registEvent()
+}, 2000)
+
 
 function registEvent(){
     [1000, 10000, 1000000, 100000000].forEach((num) => {
@@ -116,23 +119,24 @@ function main(){
         .then(syncGraph)
 }
 
-function calculationSort(name, AlgorithmWorker, numbersByLen){
+async function calculationSort(name, AlgorithmWorker, numbersByLen){
     let pass = false
+    let len = numbersByLen.length
+    let executTimes = []
 
-    return Promise.all(numbersByLen.map(async (numbers) => {
-        if(pass){
-            return -1
-        }
+    for(let i = 0 ; i < len ; i++){
+        let numbers = numbersByLen[i]
 
         const executTime = await _calculationSort(AlgorithmWorker, numbers)
 
         if(executTime < 0){
-            pass = true
+            break
         }
-        return executTime
-    })).then((executTimes) => {
-        return { name, data: executTimes }
-    })
+        
+        executTimes.push(executTime)
+    }
+
+    return { name, data: executTimes }
 }
 
 function _calculationSort(AlgorithmWorker, numbers){

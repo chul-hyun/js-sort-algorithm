@@ -13,3 +13,5 @@
 ---
 
 [성능 측정](https://vomvoru.github.io/js-sort-algorithm/)
+
+chrome 최신버전에서 돌아갑니다. (다른 브라우저는 확인안함)
