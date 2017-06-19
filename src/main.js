@@ -20,11 +20,18 @@ let graph = {
 
 let chart
 
-setTimeout(()=>{
+(async ()=>{
+    await loadedWorker()
     init(100, 10000, 1)
     registEvent()
-}, 2000)
+})()
 
+async function loadedWorker(){
+    document.querySelector('body').style.visibility = 'hidden'
+    await init(3, 4, 1)
+    await main()
+    document.querySelector('body').style.visibility = null
+}
 
 function registEvent(){
     [1000, 10000, 1000000, 100000000].forEach((num) => {
