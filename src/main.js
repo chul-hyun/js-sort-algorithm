@@ -21,17 +21,9 @@ let graph = {
 let chart
 
 (async ()=>{
-    await loadedWorker()
     init(100, 10000, 1)
     registEvent()
-})()
-
-async function loadedWorker(){
-    document.querySelector('body').style.visibility = 'hidden'
-    await init(3, 4, 1)
-    await main()
-    document.querySelector('body').style.visibility = null
-}
+})();
 
 function registEvent(){
     [1000, 10000, 1000000, 100000000].forEach((num) => {
@@ -58,10 +50,8 @@ async function toogleUI(callback){
     controllers.forEach((ele) => ele.removeAttribute('disabled'))
 }
 
-
 async function init(start, end, repeat){
     toogleUI(async() => {
-        _.range()
         chart = initChart()
         lengths = _.range(start, end + 1, Math.floor((end - start) / 10))
         graph = {
