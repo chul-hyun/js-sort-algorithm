@@ -15,3 +15,9 @@
 [성능 측정](https://vomvoru.github.io/js-sort-algorithm/)
 
 chrome 최신버전에서 돌아갑니다. (다른 브라우저는 확인안함)
+
+# todo
+* [*] linter 적용
+* [ ] MVVM 적용
+* [ ] 힙정렬 알고리즘
+* [ ] 이진트리정렬 알고리즘

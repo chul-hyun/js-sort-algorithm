@@ -1,6 +1,6 @@
 const insertSort = require('./insertSort')
 
-onmessage = ({data}) =>{
+onmessage = ({ data }) => {
     insertSort(data)
     postMessage(true)
 

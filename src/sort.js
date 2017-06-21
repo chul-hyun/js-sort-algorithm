@@ -1,5 +1,5 @@
-function sort(arr){
-    arr.sort((a, b) => a - b)
+function sort(target) {
+    target.sort((a, b) => a - b)
 }
 
 module.exports = sort

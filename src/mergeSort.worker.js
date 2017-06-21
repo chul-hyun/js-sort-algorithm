@@ -1,6 +1,6 @@
 const mergeSort = require('./mergeSort')
 
-onmessage = ({data}) =>{
+onmessage = ({ data }) => {
     mergeSort(data)
     postMessage(true)
 

@@ -1,6 +1,6 @@
 const selectionSort = require('./selectionSort')
 
-onmessage = ({data}) =>{
+onmessage = ({ data }) => {
     selectionSort(data)
     postMessage(true)
 

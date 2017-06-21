@@ -1,6 +1,6 @@
 const sort = require('./sort')
 
-onmessage = ({data}) =>{
+onmessage = ({ data }) => {
     sort(data)
     postMessage(true)
 

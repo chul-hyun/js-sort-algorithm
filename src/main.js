@@ -10,22 +10,20 @@ const InsertSortWorker = require('./insertSort.worker.js')
 const SelectionSortWorker = require('./selectionSort.worker.js')
 const SortWorker = require('./sort.worker.js')
 
-const runOneMore = document.querySelector('#runOneMore')
-
 let lengths = []
 const MAX_EXECUTE_TIME = 1000 * 5
 let graph = {
-    x : lengths
+    x: lengths,
 }
 
 let chart
 
-(async ()=>{
+(async () => {
     init(100, 10000, 1)
     registEvent()
 })();
 
-function registEvent(){
+function registEvent() {
     [1000, 10000, 1000000, 100000000].forEach((num) => {
         document.querySelector(`#range${num}`)
             .addEventListener('click', () => init(10, num, 1))
@@ -34,123 +32,122 @@ function registEvent(){
     const runOneMoreDOM = document.querySelector('#runOneMore')
 
     runOneMoreDOM.addEventListener('click', async () => {
-        toogleUI(async() => {
+        toogleUI(async () => {
             await main()
         })
     })
 }
 
-async function toogleUI(callback){
+async function toogleUI(callback) {
     const controllers = document.querySelectorAll('.controller')
 
-    controllers.forEach((ele) => ele.setAttribute('disabled', true))
-    
+    controllers.forEach(ele => ele.setAttribute('disabled', true))
+
     await callback()
 
-    controllers.forEach((ele) => ele.removeAttribute('disabled'))
+    controllers.forEach(ele => ele.removeAttribute('disabled'))
 }
 
-async function init(start, end, repeat){
-    toogleUI(async() => {
+async function init(start, end, repeat) {
+    toogleUI(async () => {
         chart = initChart()
         lengths = _.range(start, end + 1, Math.floor((end - start) / 10))
         graph = {
-            x : lengths
+            x: lengths,
         }
 
-        for(let i = 0 ; i < repeat ; i++){
+        for (let i = 0 ; i < repeat ; i++) {
             console.log(i)
-            await main()
+            await main() // eslint-disable-line
         }
     })
 }
 
-function initChart(){
+function initChart() {
     return c3.generate({
         data: {
             x: 'x',
-            columns: [ ]
+            columns: [],
         },
         axis: {
             x: {
                 tick: {
-                    rotate: 75
-                }
+                    rotate: 75,
+                },
             },
             y: {
                 tick: {
-                    format: (y) => `${y} ms`
-                }
-            }
+                    format: y => `${y} ms`,
+                },
+            },
         },
         subchart: {
-            show: true
+            show: true,
         },
         zoom: {
-            enabled: true
+            enabled: true,
         },
-        "bindto": "#app"
+        bindto: '#app',
     });
 }
 
-function main(){
-    const numbersByLen = lengths.map((len) => utill.getRandomNumbers(len, 0, 100000000))
-    
+function main() {
+    const numbersByLen = lengths.map(len => utill.getRandomNumbers(len, 0, 100000000))
+
     return calculationSort('sort', SortWorker, numbersByLen)
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('quick sort', QuickSortWorker, numbersByLen))
+        .then(() => calculationSort('quick sort', QuickSortWorker, numbersByLen))
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('merge sort', MergeSortWorker, numbersByLen))
+        .then(() => calculationSort('merge sort', MergeSortWorker, numbersByLen))
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('insert sort', InsertSortWorker, numbersByLen))
+        .then(() => calculationSort('insert sort', InsertSortWorker, numbersByLen))
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('selection sort', SelectionSortWorker, numbersByLen))
+        .then(() => calculationSort('selection sort', SelectionSortWorker, numbersByLen))
         .then(viewGraph)
         .then(syncGraph)
-        .then(()=> calculationSort('bubble sort', BubbleSortWorker, numbersByLen))
+        .then(() => calculationSort('bubble sort', BubbleSortWorker, numbersByLen))
         .then(viewGraph)
         .then(syncGraph)
 }
 
-async function calculationSort(name, AlgorithmWorker, numbersByLen){
-    let pass = false
-    let len = numbersByLen.length
-    let executTimes = []
+async function calculationSort(name, AlgorithmWorker, numbersByLen) {
+    const len = numbersByLen.length
+    const executTimes = []
 
-    for(let i = 0 ; i < len ; i++){
-        let numbers = numbersByLen[i]
+    for (let i = 0 ; i < len ; i++) {
+        const numbers = numbersByLen[i]
 
-        const executTime = await _calculationSort(AlgorithmWorker, numbers)
+        const executTime = await _calculationSort(AlgorithmWorker, numbers) // eslint-disable-line
 
-        if(executTime < 0){
+        if (executTime < 0) {
             break
         }
-        
+
         executTimes.push(executTime)
     }
 
     return { name, data: executTimes }
 }
 
-function _calculationSort(AlgorithmWorker, numbers){
+function _calculationSort(AlgorithmWorker, numbers) {
     return new Promise((resolve) => {
         const worker = new AlgorithmWorker()
 
-        let timeout = setTimeout(()=>{
+        const timeout = setTimeout(() => {
             worker.terminate()
             resolve(-1)
         }, MAX_EXECUTE_TIME)
 
-        let startTime = window.performance.now()
+        const startTime = window.performance.now()
 
         worker.postMessage(numbers)
         worker.addEventListener('message', () => {
-            let endTime = window.performance.now()
-            let executTime = endTime - startTime
+            const endTime = window.performance.now()
+            const executTime = endTime - startTime
 
             clearTimeout(timeout)
             worker.terminate()
@@ -159,10 +156,10 @@ function _calculationSort(AlgorithmWorker, numbers){
     })
 }
 
-function viewGraph({ name, data }){
-    let originData = graph[name]
+function viewGraph({ name, data }) {
+    const originData = graph[name]
 
-    if( originData === undefined ){
+    if (originData === undefined) {
         graph[name] = data.map(convertSafeFloat)
         return
     }
@@ -172,18 +169,18 @@ function viewGraph({ name, data }){
     })
 }
 
-function convertSafeFloat(val){
+function convertSafeFloat(val) {
     return parseFloat(val.toFixed(5))
 }
 
-function syncGraph(){
+function syncGraph() {
     return new Promise((resolve) => {
         const columns = []
 
-        for(let name in graph){
+        Object.keys(graph).forEach((name) => {
             const column = [name]
             graph[name].every((val, i) => {
-                if(val === undefined || val < 0){
+                if (val === undefined || val < 0) {
                     return false;
                 }
                 column[i + 1] = val
@@ -191,11 +188,11 @@ function syncGraph(){
             })
 
             columns.push(column)
-        }
+        })
 
         chart.load({
             columns,
-            done: resolve
+            done: resolve,
         });
     })
 }

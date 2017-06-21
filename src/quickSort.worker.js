@@ -1,6 +1,6 @@
 const quickSort = require('./quickSort')
 
-onmessage = ({data}) =>{
+onmessage = ({ data }) => {
     quickSort(data)
     postMessage(true)
 

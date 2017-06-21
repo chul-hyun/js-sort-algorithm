@@ -1,6 +1,6 @@
 const bubbleSort = require('./bubbleSort')
 
-onmessage = ({data}) =>{
+onmessage = ({ data }) => {
     bubbleSort(data)
     postMessage(true)
 

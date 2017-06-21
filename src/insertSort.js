@@ -1,15 +1,13 @@
-function insertSort(arr){
-    for(var i = 1 ; i < arr.length ; i++){
-        var val = arr[i]
-        var j = i - 1
-        while(j >= 0 && arr[j] > val){
-            arr[j + 1] = arr[j]
-            j--
+function insertSort(target) {
+    for (let i = 1 ; i < target.length ; i++) {
+        const toIns = target[i]
+        let pos = i - 1
+        while (pos >= 0 && target[pos] > toIns) {
+            target[pos + 1] = target[pos]
+            pos--
         }
-        arr[j + 1] = val
+        target[pos + 1] = toIns
     }
 }
-
-//require('./getAvgExecutTime')(insertSort, 10, 3, true)
 
 module.exports = insertSort

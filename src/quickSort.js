@@ -1,52 +1,42 @@
-
-function quickSort(arr){
-    _quickSort(arr, 0, arr.length - 1)
+function quickSort(target) {
+    quickSortNested(target, 0, target.length - 1)
 }
-function _quickSort(arr, left, right){
-    if(left >= right){
+function quickSortNested(target, left, right) {
+    if (left >= right) {
         return
     }
 
-    // let pivot = getPivot(arr, left, right)
-    let pivot = left
-    let pivotData = arr[pivot]
+    const pivot = left
+    const pivotData = target[pivot]
 
     let i = left + 1
     let j = right
 
-    while(i !== j){
-        if(arr[i] <= pivotData){
+    while (i !== j) {
+        if (target[i] <= pivotData) {
             i++
-            continue
-        }
-
-        if(arr[j] >= pivotData){
+        } else if (target[j] >= pivotData) {
             j--
-            continue
+        } else {
+            swap(target, i, j)
         }
-
-        swap(arr, i, j)
     }
 
-    if(pivotData < arr[i]){
-        swap(arr, pivot, i - 1)
-    }else{
-        swap(arr, pivot, i)
+    if (pivotData < target[i]) {
+        swap(target, pivot, i - 1)
+    } else {
+        swap(target, pivot, i)
     }
-    
 
-    _quickSort(arr, left, i - 1)
-    _quickSort(arr, i + 1, right)
+
+    quickSortNested(target, left, i - 1)
+    quickSortNested(target, i + 1, right)
 }
 
-function swap(arr, i, j){
+function swap(arr, i, j) {
     const temp = arr[i]
     arr[i] = arr[j]
-    arr[j] = temp 
-}
-
-function getPivot(arr, left, right){
-    return left
+    arr[j] = temp
 }
 
 module.exports = quickSort
